@@ -1450,6 +1450,12 @@ html.f50-console #tokenModal .f50-login-footer>button.f50-login-submit[data-busy
 html.f50-console .f50-files-dialog .f50-files-dialog-actions>button.f50-primary.f50-files-danger {background:var(--f-danger,#c63737)!important;border-color:var(--f-danger,#c63737)!important;color:#fff!important;}
 html.f50-console .f50-files-dialog .f50-files-dialog-actions>button.f50-primary.f50-files-danger:hover {background:color-mix(in srgb,var(--f-danger,#c63737) 88%,black)!important;}
 
+.f50-files-sort {display:inline-flex;align-items:center;gap:6px;font-size:13px;color:var(--f-muted);}
+.f50-files-sort select {min-height:36px;padding:6px 28px 6px 10px!important;font-size:13px!important;margin:0!important;}
+.f50-file-row[data-empty=true] .f50-file-icon {background:var(--f-bg);color:var(--f-muted);opacity:.6;}
+.f50-file-row[data-empty=true] .f50-file-copy strong {color:var(--f-muted);font-weight:400;}
+@media(max-width:600px){.f50-files-actions {flex-wrap:wrap;} .f50-files-sort {width:100%;} .f50-files-sort select {flex:1;min-height:44px;}}
+
 </style>
 <script>
 /* F50 Console v1.6 — no additional network requests, original controls retained. */
@@ -2287,7 +2293,8 @@ const installFilesPage = (page, icon) => {
   };
   const step = (command, message) => `{ ${command} ; } >/dev/null 2>&1 || { echo '${FAIL}${message}'; exit 0; }`;
   const signedIn = () => typeof KANO_TOKEN !== 'undefined' && !!KANO_TOKEN;
-  let segments = [], entries = [], allNames = new Set(), busy = false;
+  let segments = [], entries = [], allNames = new Set(), busy = false, folderTotal = 0, sortKey = 'name';
+  try { sortKey = localStorage.getItem('f50-files-sort') || 'name'; } catch {}
   // System items at the storage root stay out of view: app data, firmware staging, logs and the boot script that starts Mihomo.
   const hiddenAtRoot = name => /^(Android|Upgrade|sd_logs|lost\+found)$/.test(name) || /^ufi_|^unlock_samba\.sh$|\.(sh|log|lock|flag)$/i.test(name);
   const pathOf = (...extra) => [ROOT, ...segments, ...extra].join('/');
@@ -2330,7 +2337,7 @@ const installFilesPage = (page, icon) => {
 
   // File names are data: the console's text cleanup must never rewrite them.
   const root = document.createElement('div'); root.className = 'f50-files'; root.dataset.f50Preserve = 'true';
-  root.innerHTML = `<div class="f50-files-toolbar"><nav class="f50-files-crumbs" aria-label="当前位置"></nav><div class="f50-files-actions"><button type="button" class="f50-files-newdir">${glyph('newFolder')}<span>新建文件夹</span></button><button type="button" class="f50-files-upload f50-primary" data-f50-primary="true">${glyph('upload')}<span>上传</span></button><input type="file" multiple hidden></div></div>
+  root.innerHTML = `<div class="f50-files-toolbar"><nav class="f50-files-crumbs" aria-label="当前位置"></nav><div class="f50-files-actions"><label class="f50-files-sort"><span>排序</span><select aria-label="排序方式"><option value="name">名称</option><option value="size">大小</option><option value="time">修改时间</option></select></label><button type="button" class="f50-files-newdir">${glyph('newFolder')}<span>新建文件夹</span></button><button type="button" class="f50-files-upload f50-primary" data-f50-primary="true">${glyph('upload')}<span>上传</span></button><input type="file" multiple hidden></div></div>
 <div class="f50-files-space"><div class="f50-files-space-track"><span></span></div><p></p></div>
 <p class="f50-files-alert" role="alert" hidden></p>
 <section class="f50-files-queue" aria-label="上传任务" hidden></section>
@@ -2338,6 +2345,8 @@ const installFilesPage = (page, icon) => {
 <div class="f50-files-drop" hidden><div>${glyph('upload')}<strong></strong><span>松开即可上传</span></div></div>
 <dialog class="f50-files-dialog"><form method="dialog"><h2></h2><div class="f50-files-dialog-body"></div><div class="f50-files-dialog-actions"></div></form></dialog>`;
   page.append(root);
+  const sortSelect = root.querySelector('.f50-files-sort select'); sortSelect.value = sortKey;
+  sortSelect.onchange = () => { sortKey = sortSelect.value; try { localStorage.setItem('f50-files-sort', sortKey); } catch {} renderList(); };
   const $q = selector => root.querySelector(selector);
   const crumbs = $q('.f50-files-crumbs'), list = $q('.f50-files-list'), state = $q('.f50-files-state'), alertBox = $q('.f50-files-alert');
   const queue = $q('.f50-files-queue'), picker = $q('input[type=file]'), drop = $q('.f50-files-drop'), dialog = $q('.f50-files-dialog');
@@ -2356,15 +2365,19 @@ const installFilesPage = (page, icon) => {
       crumbs.append(item);
     });
   };
+  const byName = (a, b) => a.name.localeCompare(b.name, 'zh-Hans-CN', { numeric: true });
+  const sorters = { name: (a, b) => (b.dir - a.dir) || byName(a, b), size: (a, b) => (b.size - a.size) || byName(a, b), time: (a, b) => (b.mtime - a.mtime) || byName(a, b) };
   const renderList = () => {
     list.replaceChildren();
+    entries.sort(sorters[sortKey] || sorters.name);
     for (const entry of entries) {
       const row = document.createElement('div'); row.className = 'f50-file-row'; row.setAttribute('role', 'listitem');
       const main = document.createElement('button'); main.type = 'button'; main.className = 'f50-file-main';
       const kind = entry.dir ? 'folder' : kindOf(entry.name);
       main.innerHTML = `<span class="f50-file-icon" data-kind="${kind}">${glyph(kind)}</span><span class="f50-file-copy"><strong></strong><small></small></span>`;
       main.querySelector('strong').textContent = entry.name;
-      main.querySelector('small').textContent = (entry.dir ? '文件夹' : formatSize(entry.size)) + ' · ' + formatTime(entry.mtime);
+      main.querySelector('small').textContent = (entry.dir ? (entry.count ? `${entry.count} 项 · ${formatSize(entry.size)}` : '空文件夹') : formatSize(entry.size)) + ' · ' + formatTime(entry.mtime);
+      if (entry.dir && !entry.count) row.dataset.empty = 'true';
       main.setAttribute('aria-label', (entry.dir ? '打开文件夹 ' : '文件操作 ') + entry.name);
       main.onclick = () => entry.dir ? open([...segments, entry.name]) : actions(entry);
       const more = document.createElement('button'); more.type = 'button'; more.className = 'f50-file-more';
@@ -2378,7 +2391,8 @@ const installFilesPage = (page, icon) => {
       const out = await shell(`df -k ${ROOT} | tail -n 1; echo ${OK}`);
       const [, total, used, free] = out.trim().split(/\s+/).map(Number);
       if (!total) return;
-      $q('.f50-files-space p').textContent = `已用 ${formatSize(used * 1024)}，可用 ${formatSize(free * 1024)}，共 ${formatSize(total * 1024)}`;
+      // The partition also holds the system and apps; name the user's own files separately.
+      $q('.f50-files-space p').textContent = `${segments.length ? '此文件夹' : '你的文件'} ${formatSize(folderTotal)} · 设备已用 ${formatSize(used * 1024)}（含系统与应用），可用 ${formatSize(free * 1024)}`;
       $q('.f50-files-space-track span').style.width = Math.min(100, used / total * 100).toFixed(1) + '%';
       root.dataset.free = String(free * 1024);
     } catch {}
@@ -2389,14 +2403,15 @@ const installFilesPage = (page, icon) => {
     root.dataset.ready = 'true'; setState('正在读取…');
     try {
       // Temporary download links and abandoned upload parts expire after 10 minutes.
-      const out = await shell(`find ${UPLOADS} -maxdepth 1 \\( -name 'f50dl-*' -o -name '*.f50part' \\) -mmin +10 -exec rm -f {} + 2>/dev/null; D=${arg(pathOf())}; [ -d "$D" ] || { echo '${FAIL}文件夹不存在'; exit 0; }; for f in "$D"/*; do [ -e "$f" ] && stat -c '%F\t%s\t%Y\t%n' "$f"; done; echo ${OK}`);
+      const out = await shell(`find ${UPLOADS} -maxdepth 1 \\( -name 'f50dl-*' -o -name '*.f50part' \\) -mmin +10 -exec rm -f {} + 2>/dev/null; D=${arg(pathOf())}; [ -d "$D" ] || { echo '${FAIL}文件夹不存在'; exit 0; }; for f in "$D"/*; do [ -e "$f" ] || continue; if [ -d "$f" ]; then N=$(ls "$f" 2>/dev/null | wc -l); K=$(du -sk "$f" 2>/dev/null | cut -f1); else N=0; K=0; fi; printf '%s\t%s\t' $((N)) $((K)); stat -c '%F\t%s\t%Y\t%n' "$f"; done; echo ${OK}`, 90000);
       const listed = out.split('\n').filter(Boolean).map(line => {
-        const [type, size, mtime, ...name] = line.split('\t');
-        return { dir: type === 'directory', size: Number(size) || 0, mtime: Number(mtime) || 0, name: name.join('\t').split('/').pop() };
+        const [count, kb, type, size, mtime, ...name] = line.split('\t'), dir = type === 'directory';
+        // Folders report their recursive size, so sorting by size shows where space actually goes.
+        return { dir, count: Number(count) || 0, size: dir ? (Number(kb) || 0) * 1024 : Number(size) || 0, mtime: Number(mtime) || 0, name: name.join('\t').split('/').pop() };
       }).filter(entry => entry.name);
       allNames = new Set(listed.map(entry => entry.name));
-      entries = listed.filter(entry => !entry.name.endsWith('.f50upload') && !(segments.length === 0 && hiddenAtRoot(entry.name)))
-        .sort((a, b) => (b.dir - a.dir) || a.name.localeCompare(b.name, 'zh-Hans-CN', { numeric: true }));
+      entries = listed.filter(entry => !entry.name.endsWith('.f50upload') && !(segments.length === 0 && hiddenAtRoot(entry.name)));
+      folderTotal = entries.reduce((sum, entry) => sum + entry.size, 0);
       setState(''); renderList();
     } catch (error) { entries = []; list.replaceChildren(); setState(''); showAlert('无法读取文件夹：' + error.message); }
     refreshSpace();
