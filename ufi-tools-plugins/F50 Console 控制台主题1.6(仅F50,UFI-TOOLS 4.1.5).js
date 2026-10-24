@@ -1377,9 +1377,82 @@ html.f50-console #tokenModal .f50-login-footer>button.f50-login-submit[data-busy
 .f50-console #toastContainer>.toastkano[data-f50-tone=success]::before {color:var(--f-green);--f50-toast-icon:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='9'/%3E%3Cpath d='M8 12.5l2.8 2.8L16.5 9.5'/%3E%3C/svg%3E");}
 .f50-console #toastContainer>.toastkano.f50-quiet-toast {display:none!important;}
 
+/* Files page: toolbar, storage meter, upload queue and a single list panel. */
+.f50-files {position:relative;max-width:960px;display:flex;flex-direction:column;gap:16px;}
+.f50-files-toolbar {display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;}
+.f50-files-crumbs {display:flex;align-items:center;gap:4px;min-width:0;flex:1;flex-wrap:wrap;font-size:14px;}
+.f50-files-crumbs>button {min-height:32px;padding:4px 8px!important;margin:0!important;border:0!important;border-radius:6px!important;background:transparent!important;color:var(--f-blue)!important;font-size:14px!important;font-weight:400;}
+.f50-files-crumbs>button:hover {background:var(--f-selected)!important;}
+.f50-files-crumbs>span[aria-current] {padding:4px 8px;font-weight:600;color:var(--f-text);overflow-wrap:anywhere;}
+.f50-files-sep {color:var(--f-muted);}
+.f50-files-actions {display:flex;gap:8px;flex:none;}
+.f50-files-actions>button {display:inline-flex;align-items:center;gap:6px;min-height:36px;margin:0!important;padding:8px 14px!important;font-size:13px!important;}
+.f50-files-actions .f50-icon {width:16px;height:16px;}
+.f50-files-space {display:flex;align-items:center;gap:12px;}
+.f50-files-space-track {flex:none;width:120px;height:6px;border-radius:3px;background:var(--f-border);overflow:hidden;}
+.f50-files-space-track>span {display:block;height:100%;width:0;background:var(--f-blue);border-radius:3px;}
+.f50-files-space p {margin:0;font-size:12px;color:var(--f-muted);font-variant-numeric:tabular-nums;}
+.f50-files-alert {margin:0;padding:10px 12px;border-radius:8px;background:color-mix(in srgb,var(--f-danger,#c63737) 9%,transparent);color:var(--f-danger,#c63737);font-size:13px;line-height:20px;}
+.f50-files-alert[hidden],.f50-files-queue[hidden],.f50-files-drop[hidden],.f50-files-state[hidden] {display:none!important;}
+.f50-files-panel {background:var(--f-panel);border:1px solid var(--f-border);border-radius:10px;overflow:hidden;}
+.f50-file-row {display:flex;align-items:center;border-bottom:1px solid var(--f-border);}
+.f50-file-row:last-child {border-bottom:0;}
+.f50-file-main {display:flex;align-items:center;gap:12px;flex:1;min-width:0;min-height:56px;margin:0!important;padding:8px 8px 8px 16px!important;border:0!important;border-radius:0!important;background:transparent!important;color:var(--f-text)!important;text-align:left;font-weight:400;}
+.f50-file-main:hover,.f50-file-more:hover {background:var(--f-selected)!important;}
+.f50-file-icon {display:grid;place-items:center;flex:none;width:36px;height:36px;border-radius:8px;background:var(--f-bg);color:var(--f-muted);}
+.f50-file-icon[data-kind=folder] {background:var(--f-selected);color:var(--f-blue);}
+.f50-file-icon .f50-icon {width:20px;height:20px;}
+.f50-file-copy {display:flex;flex-direction:column;min-width:0;}
+.f50-file-copy strong {font-size:14px;font-weight:500;line-height:20px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.f50-file-copy small {font-size:12px;line-height:18px;color:var(--f-muted);font-variant-numeric:tabular-nums;}
+.f50-file-more {display:grid;place-items:center;flex:none;width:48px;min-height:56px;margin:0!important;padding:0!important;border:0!important;border-radius:0!important;background:transparent!important;color:var(--f-muted)!important;}
+.f50-file-more .f50-icon {width:20px;height:20px;stroke-width:2.6;}
+.f50-files-state {margin:0;padding:40px 16px;text-align:center;font-size:13px;color:var(--f-muted);}
+.f50-files-queue {display:flex;flex-direction:column;background:var(--f-panel);border:1px solid var(--f-border);border-radius:10px;padding:4px 16px;}
+.f50-files-queue-heading {display:flex;align-items:center;justify-content:space-between;min-height:40px;font-size:13px;}
+.f50-files-task {display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;column-gap:8px;padding:8px 0;border-top:1px solid var(--f-border);}
+.f50-files-task-copy {display:flex;justify-content:space-between;gap:12px;min-width:0;font-size:13px;}
+.f50-files-task-copy strong {font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.f50-files-task-copy small {flex:none;color:var(--f-muted);font-variant-numeric:tabular-nums;}
+.f50-files-task[data-state=failed] small {color:var(--f-danger,#c63737);}
+.f50-files-task[data-state=done] small {color:var(--f-green);}
+.f50-files-task-track {grid-column:1;height:4px;margin-top:6px;border-radius:2px;background:var(--f-border);overflow:hidden;}
+.f50-files-task-track>span {display:block;height:100%;background:var(--f-blue);transition:width .2s ease-out;}
+.f50-files-task[data-state=done] .f50-files-task-track>span {background:var(--f-green);}
+.f50-files-task-cancel {grid-column:2;grid-row:1/span 2;display:grid;place-items:center;width:36px;height:36px;min-height:36px;margin:0!important;padding:0!important;border:0!important;background:transparent!important;color:var(--f-muted)!important;}
+.f50-files-task-cancel .f50-icon {width:16px;height:16px;}
+.f50-files-drop {position:absolute;inset:-8px;z-index:3;display:grid;place-items:center;border:2px dashed var(--f-blue);border-radius:12px;background:color-mix(in srgb,var(--f-panel) 88%,transparent);pointer-events:none;}
+.f50-files-drop>div {display:flex;flex-direction:column;align-items:center;gap:6px;color:var(--f-blue);font-size:13px;}
+.f50-files-drop .f50-icon {width:32px;height:32px;}
+.f50-files-drop strong {font-size:15px;color:var(--f-text);}
+.f50-files-dialog {width:min(400px,calc(100vw - 32px));padding:24px;border:1px solid var(--f-border);border-radius:14px;background:var(--f-panel);color:var(--f-text);box-shadow:0 12px 32px rgb(16 24 40 / .14);}
+.f50-files-dialog::backdrop {background:rgb(15 18 24 / .32);}
+.f50-files-dialog h2 {margin:0 0 12px;font-size:17px;font-weight:600;line-height:24px;overflow-wrap:anywhere;}
+.f50-files-dialog-body p {margin:0 0 4px;font-size:14px;line-height:22px;color:var(--f-muted);}
+.f50-files-dialog-body input {width:100%;box-sizing:border-box;min-height:44px;padding:10px 12px!important;font-size:14px!important;}
+.f50-files-dialog-actions {display:flex;justify-content:flex-end;gap:8px;margin-top:20px;}
+.f50-files-dialog-actions>button {min-width:80px;min-height:40px;margin:0!important;}
+.f50-files-dialog-actions>.f50-primary {order:1;}
+.f50-files-dialog[data-menu=true] .f50-files-dialog-actions {flex-direction:column;align-items:stretch;gap:4px;margin-top:4px;}
+.f50-files-dialog[data-menu=true] .f50-files-dialog-actions>button {justify-content:flex-start;text-align:left;min-height:44px;border-color:transparent!important;background:transparent!important;color:var(--f-text)!important;}
+.f50-files-dialog[data-menu=true] .f50-files-dialog-actions>button:hover {background:var(--f-selected)!important;}
+.f50-files-dialog[data-menu=true] .f50-files-dialog-actions>button:not(.f50-files-menu-item) {justify-content:center;text-align:center;margin-top:8px;border-color:var(--f-border)!important;color:var(--f-muted)!important;}
+.f50-files-dialog .f50-files-danger,.f50-files-dialog[data-menu=true] .f50-files-dialog-actions>button.f50-files-danger {color:var(--f-danger,#c63737)!important;}
+.f50-files-dialog .f50-files-danger.f50-primary {background:var(--f-danger,#c63737)!important;border-color:var(--f-danger,#c63737)!important;color:#fff!important;}
+@media(max-width:600px){
+  .f50-files-actions {width:100%;}
+  .f50-files-actions>button {flex:1;justify-content:center;min-height:44px;}
+  .f50-files-space-track {width:72px;}
+  .f50-file-main {padding-left:12px!important;}
+  .f50-files-dialog-actions>button {flex:1;min-height:44px;}
+}
+/* .f50-danger opts these buttons out of the console's blue primary rule. */
+html.f50-console .f50-files-dialog .f50-files-dialog-actions>button.f50-primary.f50-files-danger {background:var(--f-danger,#c63737)!important;border-color:var(--f-danger,#c63737)!important;color:#fff!important;}
+html.f50-console .f50-files-dialog .f50-files-dialog-actions>button.f50-primary.f50-files-danger:hover {background:color-mix(in srgb,var(--f-danger,#c63737) 88%,black)!important;}
+
 </style>
 <script>
-/* F50 Console v1.5 — no additional network requests, original controls retained. */
+/* F50 Console v1.6 — no additional network requests, original controls retained. */
 (() => {
   'use strict';
   if (new URLSearchParams(location.search).get('f50_native') === '1') return;
@@ -1414,6 +1487,7 @@ html.f50-console #tokenModal .f50-login-footer>button.f50-login-submit[data-busy
     cellular:'M5 20v-4 M10 20v-8 M15 20V8 M20 20V4',
     network:'M8 16h8v5H8z M12 16V8 M4 8h16 M4 8V3 M20 8V3',
     sms:'M4 4h16v13H9l-5 4z M8 8h8 M8 12h5',
+    files:'M3.5 7.5A2 2 0 0 1 5.5 5.5h4l2 2h7a2 2 0 0 1 2 2v7.5a2 2 0 0 1-2 2h-13a2 2 0 0 1-2-2Z',
     apps:'M4 4h6v6H4z M14 4h6v6h-6z M4 14h6v6H4z M14 14h6v6h-6z',
     system:'M12 8a4 4 0 1 0 0 8 4 4 0 0 0 0-8 M12 2v3 M12 19v3 M2 12h3 M19 12h3 M5 5l2 2 M17 17l2 2 M5 19l2-2 M17 7l2-2',
     advanced:'M4 6l6 6-6 6 M12 18h8',
@@ -1465,6 +1539,7 @@ html.f50-console #tokenModal .f50-login-footer>button.f50-login-submit[data-busy
     ['cellular','蜂窝网络','管理网络制式、频段与基站'],
     ['network','本地网络','管理 Wi-Fi、接入设备与有线连接'],
     ['sms','短信','收发消息与配置短信转发'],
+    ['files','文件','上传、下载与管理设备存储中的文件'],
     ['apps','应用与插件','管理扩展功能与自动化任务'],
     ['system','系统','设备信息、账户与系统维护'],
     ['advanced','高级工具','终端、AT 指令与调试功能']
@@ -1474,11 +1549,12 @@ html.f50-console #tokenModal .f50-login-footer>button.f50-login-submit[data-busy
   const cleanChrome = value => value.replace(/⬇\uFE0F?/gu,'下载 ').replace(/⬆\uFE0F?/gu,'上传 ').replace(emoji,'').replace(/[\uFE0F\uFE0E!！]/g,'').replace(/一键/g,'').replace(/USB\s*上网[:：]\s*自动/g,'自动').replace(/WIFI[:：]\s*2\.4G/gi,'2.4 GHz').replace(/WIFI[:：]\s*5G/gi,'5 GHz').replace(/WIFI[:：]\s*关闭/gi,'关闭').replace(/锁频段/g,'锁定频段').replace(/解除锁定频段/g,'解除频段锁定').replace(/锁基站/g,'锁定基站').replace(/解除锁定基站/g,'解除基站锁定').replace(/\bWIFI\b/gi,'Wi-Fi').replace(/此选项即时更改无需确认[。.]?/g,'更改后立即生效').replace(/5g\.band\.[a-z0-9]+/gi,'未提供');
   const protectedContent='script,style,textarea,input,pre,code,svg,canvas,iframe,#sms-list,#AT_RESULT,#AD_RESULT,[data-f50-preserve]';
   const routes = new Map();
+  let filesView = null;
   const boot = () => {
     const container = $('#BG_OVERLAY>.container');
     if (!container || !$('.actions-buttons')) { revealPage(); return; }
     const shell = document.createElement('div'); shell.id='f50-shell';
-    shell.innerHTML=`<aside id="f50-sidebar"><div class="f50-brand"><span class="f50-brand-mark">F50</span><div><strong>F50 Console</strong><small>NETWORK MANAGEMENT</small></div></div><div class="f50-nav-label">设备管理</div><nav aria-label="主导航">${pages.map(([key,label])=>`<button type="button" class="f50-nav" data-page="${key}">${icon(key)}${label}</button>`).join('')}</nav><div class="f50-sidebar-bottom"><span>F50 Console · 1.5</span><a href="https://github.com/kanoqwq/UFI-TOOLS" target="_blank" rel="noopener">基于 UFI-TOOLS</a></div></aside><main id="f50-workspace"><header id="f50-topbar"><div class="f50-crumb"><button type="button" class="f50-menu-toggle f50-icon-button" title="展开导航" aria-label="展开导航" aria-expanded="false">${icon('menu')}</button><span>F50</span><span>/</span><b id="f50-crumb-page">总览</b></div><div class="f50-header-actions"><button id="f50-theme-toggle" class="f50-icon-button" type="button">深色</button><button id="f50-account" type="button" aria-label="账户设置" title="账户设置">${icon('account')}<span class="f50-account-label">账户</span></button></div></header><div id="f50-pages">${pages.map(([key,label,desc])=>`<section id="f50-page-${key}" class="f50-page" ${key==='overview'?'':'hidden'}><div class="f50-page-heading"><div><h1>${label}</h1><p class="f50-subtitle">${desc}</p></div></div></section>`).join('')}</div></main>`;
+    shell.innerHTML=`<aside id="f50-sidebar"><div class="f50-brand"><span class="f50-brand-mark">F50</span><div><strong>F50 Console</strong><small>NETWORK MANAGEMENT</small></div></div><div class="f50-nav-label">设备管理</div><nav aria-label="主导航">${pages.map(([key,label])=>`<button type="button" class="f50-nav" data-page="${key}">${icon(key)}${label}</button>`).join('')}</nav><div class="f50-sidebar-bottom"><span>F50 Console · 1.6</span><a href="https://github.com/kanoqwq/UFI-TOOLS" target="_blank" rel="noopener">基于 UFI-TOOLS</a></div></aside><main id="f50-workspace"><header id="f50-topbar"><div class="f50-crumb"><button type="button" class="f50-menu-toggle f50-icon-button" title="展开导航" aria-label="展开导航" aria-expanded="false">${icon('menu')}</button><span>F50</span><span>/</span><b id="f50-crumb-page">总览</b></div><div class="f50-header-actions"><button id="f50-theme-toggle" class="f50-icon-button" type="button">深色</button><button id="f50-account" type="button" aria-label="账户设置" title="账户设置">${icon('account')}<span class="f50-account-label">账户</span></button></div></header><div id="f50-pages">${pages.map(([key,label,desc])=>`<section id="f50-page-${key}" class="f50-page" ${key==='overview'?'':'hidden'}><div class="f50-page-heading"><div><h1>${label}</h1><p class="f50-subtitle">${desc}</p></div></div></section>`).join('')}</div></main>`;
     container.appendChild(shell);
     shell.querySelector('.f50-brand').innerHTML='<strong>F50 Console</strong>';
     const overview=$('#f50-page-overview');
@@ -1491,7 +1567,7 @@ html.f50-console #tokenModal .f50-login-footer>button.f50-login-submit[data-busy
     overview.querySelectorAll('.f50-rate-label').forEach((label,index)=>{label.innerHTML=icon(index?'up':'down')+(index?'上传':'下载');});
     const groups = {
       cellular:[['APNManagement','APN 设置','运营商接入点与拨号参数'],['CECULLAR','移动数据','管理蜂窝数据连接'],['ROAM','网络漫游','管理漫游时的联网行为'],['DataManagement','流量管理','流量统计与套餐限额'],['DataUsageHistory','流量历史','查看每日流量记录'],['CellularSpeedTestBtn','蜂窝测速','测试移动网络速度，会消耗流量']],
-      network:[['WIFIManagement','Wi-Fi 设置','无线网络名称、密码与频段'],['ClientManagement','接入设备','查看和管理连接到热点的设备'],['LANManagement','内网设置','网关与 DHCP 配置'],['USBStatusManagement','USB 状态','USB 连接与设备详情'],['SpeedTestBtn','内网测速','测试本地网络传输速度'],['SMB','文件共享','管理局域网文件访问']],
+      network:[['WIFIManagement','Wi-Fi 设置','无线网络名称、密码与频段'],['ClientManagement','接入设备','查看和管理连接到热点的设备'],['LANManagement','内网设置','网关与 DHCP 配置'],['USBStatusManagement','USB 状态','USB 连接与设备详情'],['SpeedTestBtn','内网测速','测试本地网络传输速度'],['SMB','文件共享','后台高级功能、文件页与 Mihomo 管理依赖此服务，请保持开启']],
       sms:[['SMS','短信收发','查看消息与发送短信'],['smsForward','短信转发','自动转发与通知配置']],
       apps:[['f50-mihomo-button','Mihomo 管理','代理内核、规则与节点管理'],['PLUGIN_SETTING','插件管理','添加、编辑或停用扩展插件'],['ScheduledTaskManagement','定时任务','管理自动化脚本与任务']],
       system:[['CLEAR','后台登录','退出后需重新输入口令与密码'],['CHANGETOKEN','后台口令','更改控制台登录口令'],['CHANGEPWD','原厂后台密码','管理设备原厂后台密码'],['OTA','软件更新','检查后台服务更新'],['SCHEDULE_REBOOT','定时重启','设置设备重启计划'],['LIGHT','指示灯','管理设备状态指示灯'],['REBOOT','重启设备','中断当前网络连接并重新启动设备'],['SHUTDOWN','关闭设备','关闭设备并中断网络连接']],
@@ -1643,7 +1719,7 @@ html.f50-console #tokenModal .f50-login-footer>button.f50-login-submit[data-busy
       if(node.matches('canvas')){node.setAttribute('role','img');node.setAttribute('aria-label',label+'趋势');}
     }
     const storage=document.createElement('div');storage.className='f50-storage-grid';
-    storage.innerHTML=['internal','external'].map(key=>`<section class="f50-panel"><h2>${key==='internal'?'内置存储':'SD 卡'}</h2><strong class="f50-storage-value" id="f50-${key}-storage">等待数据</strong><div class="f50-storage-track"><span id="f50-${key}-storage-bar"></span></div><p id="f50-${key}-storage-detail"></p></section>`).join('');
+    storage.innerHTML=['internal','external'].map(key=>`<section class="f50-panel"><h2>${key==='internal'?'内置存储':'SD 卡'}</h2><strong class="f50-storage-value" id="f50-${key}-storage">等待数据</strong><div class="f50-storage-track"><span id="f50-${key}-storage-bar"></span></div><p id="f50-${key}-storage-detail"></p>${key==='internal'?'<button type="button" class="f50-text-button" data-page="files">管理文件</button>':''}</section>`).join('');
     $('#f50-page-system').appendChild(storage);
     const qrImage=$('#QRCodeImg'),qrGroup=qrImage?.closest('.dash-border-round');
     if(qrGroup){const details=document.createElement('details');details.className='f50-wifi-qr';const summary=document.createElement('summary');summary.textContent='Wi-Fi 二维码';qrGroup.before(details);details.append(summary,qrGroup);qrGroup.querySelector('[data-i18n=wifi_qrcode_label]')?.remove();}
@@ -1668,9 +1744,21 @@ html.f50-console #tokenModal .f50-login-footer>button.f50-login-submit[data-busy
     addTabs('cellular',[['连接设置',['.f50-select-row','.f50-actions']],['频段管理',['.band-lock-container']],['基站管理',['.freq-lock-container']]]);
     addTabs('system',[['设备信息',['.devices-mon','.status-container']],['管理与维护',['.f50-select-row','.f50-actions']],['存储',['.f50-storage-grid']]]);
     addTabs('advanced',[['管理工具',['.f50-actions']],['终端',['#TTYD']]]);
+    // UFI-TOOLS gains root through the Samba service, so switching file sharing off also stops advanced features.
+    const confirmSambaOff=()=>{
+      let dialog=$('#f50-samba-confirm');
+      if(!dialog){
+        dialog=document.createElement('dialog');dialog.id='f50-samba-confirm';dialog.className='f50-files-dialog';
+        dialog.innerHTML='<form method="dialog"><h2>关闭文件共享？</h2><div class="f50-files-dialog-body"><p>后台通过这个服务获得系统权限。关闭后，高级功能、文件页、Mihomo 管理与守护的系统操作都会失效，直到重新开启。</p></div><div class="f50-files-dialog-actions"><button type="button" value="cancel">取消</button><button type="button" value="off" class="f50-primary f50-files-danger f50-danger" data-f50-primary="true" data-f50-danger="true">仍然关闭</button></div></form>';
+        dialog.querySelectorAll('button').forEach(button=>{button.onclick=()=>{dialog.close(button.value);};});
+        dialog.addEventListener('close',()=>{if(dialog.returnValue==='off'){$('#SMB')?.click();requestAnimationFrame(()=>render(false));}});
+        document.body.append(dialog);
+      }
+      dialog.returnValue='';dialog.showModal();
+    };
     shell.addEventListener('click',event=> {
       const nav=event.target.closest('[data-page]');if(nav)showPage(nav.dataset.page);
-      const action=event.target.closest('[data-action]');if(action){document.getElementById(action.dataset.action)?.click();requestAnimationFrame(()=>render(false));}
+      const action=event.target.closest('[data-action]');if(action){if(action.dataset.action==='SMB'&&action.getAttribute('aria-pressed')==='true'){confirmSambaOff();return;}document.getElementById(action.dataset.action)?.click();requestAnimationFrame(()=>render(false));}
     });
     const showPage=(key,keepInline=false)=> {
       if(!pages.some(p=>p[0]===key))key='overview';
@@ -1682,6 +1770,7 @@ html.f50-console #tokenModal .f50-login-footer>button.f50-login-submit[data-busy
       updateSidebar();
       if(key==='overview')chart?.resize();
       if(key==='sms'&&!keepInline)$('#SMS')?.click();
+      if(key==='files')filesView?.refresh();
     };
     function updateSidebar(){const sidebar=$('#f50-sidebar');const closed=innerWidth<=850&&shell.dataset.menu!=='open';if(closed&&sidebar.contains(document.activeElement))$('.f50-menu-toggle').focus();sidebar.inert=closed;}
     $('.f50-menu-toggle').onclick=()=>{const open=shell.dataset.menu!=='open';shell.dataset.menu=open?'open':'closed';$('.f50-menu-toggle').setAttribute('aria-expanded',String(open));$('.f50-menu-toggle').setAttribute('aria-label',open?'收起导航':'展开导航');$('.f50-menu-toggle').title=open?'收起导航':'展开导航';updateSidebar();};
@@ -2180,6 +2269,318 @@ html.f50-console #tokenModal .f50-login-footer>button.f50-login-submit[data-busy
       for(const [page] of pages)$('#f50-page-'+page).classList.toggle('f50-has-inline',inlineViews.some(view=>view.page===page&&!view.host.hidden));
       closing.forEach(view=>{if(view.opener?.isConnected&&view.opener.getClientRects().length)view.opener.focus({preventScroll:true});else{const heading=$('#f50-page-'+view.page+' h1');if(heading?.getClientRects().length){heading.tabIndex=-1;heading.focus({preventScroll:true});}}});
     };
+    // Files: browse, upload, download, rename and delete within internal storage through the root shell.
+// The root shell reports no exit status, so every command prints its own result marker.
+const installFilesPage = (page, icon) => {
+  const ROOT = '/sdcard', RAW = '/data/media/0', UPLOADS = '/data/data/com.minikano.f50_sms/files/uploads';
+  const CHUNK = 16 * 1024 * 1024, OK = '__F50_OK__', FAIL = '__F50_FAIL__';
+  const enc = text => btoa(unescape(encodeURIComponent(text)));
+  const arg = text => `"$(printf %s '${enc(text)}' | base64 -d)"`;
+  const shell = async (script, timeout = 30000) => {
+    if (typeof runShellWithRoot !== 'function') throw Error('后台服务不可用');
+    const res = await runShellWithRoot(script, timeout);
+    const out = String(res?.content ?? '');
+    const fail = out.split(FAIL)[1];
+    if (fail !== undefined) throw Error(fail.trim().split('\n')[0] || '操作失败');
+    if (!out.includes(OK)) throw Error('设备没有返回结果，请确认已登录并开启高级功能');
+    return out.split(OK)[0];
+  };
+  const step = (command, message) => `{ ${command} ; } >/dev/null 2>&1 || { echo '${FAIL}${message}'; exit 0; }`;
+  const signedIn = () => typeof KANO_TOKEN !== 'undefined' && !!KANO_TOKEN;
+  let segments = [], entries = [], allNames = new Set(), busy = false;
+  // System items at the storage root stay out of view: app data, firmware staging, logs and the boot script that starts Mihomo.
+  const hiddenAtRoot = name => /^(Android|Upgrade|sd_logs|lost\+found)$/.test(name) || /^ufi_|^unlock_samba\.sh$|\.(sh|log|lock|flag)$/i.test(name);
+  const pathOf = (...extra) => [ROOT, ...segments, ...extra].join('/');
+  const rawOf = (...extra) => [RAW, ...segments, ...extra].join('/');
+  const validName = name => !!name && name.length <= 200 && !/[\/\0]/.test(name) && name !== '.' && name !== '..';
+
+  const formatSize = bytes => {
+    if (bytes < 1024) return bytes + ' B';
+    const units = ['KB', 'MB', 'GB', 'TB']; let value = bytes, unit = -1;
+    do { value /= 1024; unit++; } while (value >= 1024 && unit < units.length - 1);
+    return (value >= 100 ? value.toFixed(0) : value.toFixed(1)) + ' ' + units[unit];
+  };
+  const formatTime = seconds => {
+    const date = new Date(seconds * 1000), now = new Date(), pad = n => String(n).padStart(2, '0');
+    const clock = `${pad(date.getHours())}:${pad(date.getMinutes())}`;
+    if (date.toDateString() === now.toDateString()) return '今天 ' + clock;
+    return `${date.getFullYear() === now.getFullYear() ? '' : date.getFullYear() + '-'}${pad(date.getMonth() + 1)}-${pad(date.getDate())} ${clock}`;
+  };
+  const kindOf = name => {
+    const ext = name.includes('.') ? name.split('.').pop().toLowerCase() : '';
+    if (/^(jpe?g|png|gif|webp|heic|bmp|svg)$/.test(ext)) return 'image';
+    if (/^(mp4|mov|mkv|avi|webm|m4v)$/.test(ext)) return 'video';
+    if (/^(mp3|flac|wav|m4a|aac|ogg)$/.test(ext)) return 'audio';
+    if (/^(zip|rar|7z|gz|tar|xz|apk)$/.test(ext)) return 'archive';
+    return 'file';
+  };
+  const glyphs = {
+    folder: 'M3.5 7.5A2 2 0 0 1 5.5 5.5h4l2 2h7a2 2 0 0 1 2 2v7.5a2 2 0 0 1-2 2h-13a2 2 0 0 1-2-2Z',
+    file: 'M7 3.5h6.5L18 8v11.5a1.5 1.5 0 0 1-1.5 1.5h-9A1.5 1.5 0 0 1 6 19.5v-14A1.5 1.5 0 0 1 7.5 3.5ZM13 3.5V8h4.5',
+    image: 'M4.5 5.5h15v13h-15ZM4.5 15.5l4-4 3.5 3.5 2.5-2.5 5 4M15 9.5h.01',
+    video: 'M4 6.5h11v11H4ZM15 10.5l5-3v9l-5-3',
+    audio: 'M9 17.5V6l10-2v11.5M9 17.5a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0ZM19 15.5a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0Z',
+    archive: 'M5 4.5h14v15H5ZM12 4.5v2m0 2v2m0 2v2m-1.5 0h3v3h-3Z',
+    upload: 'M12 16V5m0 0-4 4m4-4 4 4M5 15.5v3h14v-3',
+    newFolder: 'M3.5 7.5A2 2 0 0 1 5.5 5.5h4l2 2h7a2 2 0 0 1 2 2v7.5a2 2 0 0 1-2 2h-13a2 2 0 0 1-2-2ZM12 11v5m-2.5-2.5h5',
+    more: 'M6 12h.01M12 12h.01M18 12h.01',
+    close: 'M6 6l12 12M18 6 6 18'
+  };
+  const glyph = key => `<svg class="f50-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="${glyphs[key]}"/></svg>`;
+
+  // File names are data: the console's text cleanup must never rewrite them.
+  const root = document.createElement('div'); root.className = 'f50-files'; root.dataset.f50Preserve = 'true';
+  root.innerHTML = `<div class="f50-files-toolbar"><nav class="f50-files-crumbs" aria-label="当前位置"></nav><div class="f50-files-actions"><button type="button" class="f50-files-newdir">${glyph('newFolder')}<span>新建文件夹</span></button><button type="button" class="f50-files-upload f50-primary" data-f50-primary="true">${glyph('upload')}<span>上传</span></button><input type="file" multiple hidden></div></div>
+<div class="f50-files-space"><div class="f50-files-space-track"><span></span></div><p></p></div>
+<p class="f50-files-alert" role="alert" hidden></p>
+<section class="f50-files-queue" aria-label="上传任务" hidden></section>
+<section class="f50-files-panel"><div class="f50-files-list" role="list" aria-label="文件列表"></div><p class="f50-files-state" role="status"></p></section>
+<div class="f50-files-drop" hidden><div>${glyph('upload')}<strong></strong><span>松开即可上传</span></div></div>
+<dialog class="f50-files-dialog"><form method="dialog"><h2></h2><div class="f50-files-dialog-body"></div><div class="f50-files-dialog-actions"></div></form></dialog>`;
+  page.append(root);
+  const $q = selector => root.querySelector(selector);
+  const crumbs = $q('.f50-files-crumbs'), list = $q('.f50-files-list'), state = $q('.f50-files-state'), alertBox = $q('.f50-files-alert');
+  const queue = $q('.f50-files-queue'), picker = $q('input[type=file]'), drop = $q('.f50-files-drop'), dialog = $q('.f50-files-dialog');
+  const showAlert = message => { alertBox.textContent = message || ''; alertBox.hidden = !message; };
+  const setState = text => { state.textContent = text || ''; state.hidden = !text; };
+
+  const renderCrumbs = () => {
+    crumbs.replaceChildren();
+    ['机内存储', ...segments].forEach((name, index) => {
+      if (index) { const sep = document.createElement('span'); sep.className = 'f50-files-sep'; sep.textContent = '/'; sep.setAttribute('aria-hidden', 'true'); crumbs.append(sep); }
+      const last = index === segments.length;
+      const item = document.createElement(last ? 'span' : 'button');
+      item.textContent = name;
+      if (last) item.setAttribute('aria-current', 'location');
+      else { item.type = 'button'; item.onclick = () => open(segments.slice(0, index)); }
+      crumbs.append(item);
+    });
+  };
+  const renderList = () => {
+    list.replaceChildren();
+    for (const entry of entries) {
+      const row = document.createElement('div'); row.className = 'f50-file-row'; row.setAttribute('role', 'listitem');
+      const main = document.createElement('button'); main.type = 'button'; main.className = 'f50-file-main';
+      const kind = entry.dir ? 'folder' : kindOf(entry.name);
+      main.innerHTML = `<span class="f50-file-icon" data-kind="${kind}">${glyph(kind)}</span><span class="f50-file-copy"><strong></strong><small></small></span>`;
+      main.querySelector('strong').textContent = entry.name;
+      main.querySelector('small').textContent = (entry.dir ? '文件夹' : formatSize(entry.size)) + ' · ' + formatTime(entry.mtime);
+      main.setAttribute('aria-label', (entry.dir ? '打开文件夹 ' : '文件操作 ') + entry.name);
+      main.onclick = () => entry.dir ? open([...segments, entry.name]) : actions(entry);
+      const more = document.createElement('button'); more.type = 'button'; more.className = 'f50-file-more';
+      more.innerHTML = glyph('more'); more.setAttribute('aria-label', '更多操作：' + entry.name); more.onclick = () => actions(entry);
+      row.append(main, more); list.append(row);
+    }
+    if (!entries.length) setState('这个文件夹是空的，可以点「上传」或把文件拖到这里。');
+  };
+  const refreshSpace = async () => {
+    try {
+      const out = await shell(`df -k ${ROOT} | tail -n 1; echo ${OK}`);
+      const [, total, used, free] = out.trim().split(/\s+/).map(Number);
+      if (!total) return;
+      $q('.f50-files-space p').textContent = `已用 ${formatSize(used * 1024)}，可用 ${formatSize(free * 1024)}，共 ${formatSize(total * 1024)}`;
+      $q('.f50-files-space-track span').style.width = Math.min(100, used / total * 100).toFixed(1) + '%';
+      root.dataset.free = String(free * 1024);
+    } catch {}
+  };
+  const open = async (next = segments) => {
+    segments = next; renderCrumbs(); showAlert('');
+    if (!signedIn()) { entries = []; list.replaceChildren(); setState('登录后可以管理设备上的文件。'); root.dataset.ready = 'false'; return; }
+    root.dataset.ready = 'true'; setState('正在读取…');
+    try {
+      // Temporary download links and abandoned upload parts expire after 10 minutes.
+      const out = await shell(`find ${UPLOADS} -maxdepth 1 \\( -name 'f50dl-*' -o -name '*.f50part' \\) -mmin +10 -exec rm -f {} + 2>/dev/null; D=${arg(pathOf())}; [ -d "$D" ] || { echo '${FAIL}文件夹不存在'; exit 0; }; for f in "$D"/*; do [ -e "$f" ] && stat -c '%F\t%s\t%Y\t%n' "$f"; done; echo ${OK}`);
+      const listed = out.split('\n').filter(Boolean).map(line => {
+        const [type, size, mtime, ...name] = line.split('\t');
+        return { dir: type === 'directory', size: Number(size) || 0, mtime: Number(mtime) || 0, name: name.join('\t').split('/').pop() };
+      }).filter(entry => entry.name);
+      allNames = new Set(listed.map(entry => entry.name));
+      entries = listed.filter(entry => !entry.name.endsWith('.f50upload') && !(segments.length === 0 && hiddenAtRoot(entry.name)))
+        .sort((a, b) => (b.dir - a.dir) || a.name.localeCompare(b.name, 'zh-Hans-CN', { numeric: true }));
+      setState(''); renderList();
+    } catch (error) { entries = []; list.replaceChildren(); setState(''); showAlert('无法读取文件夹：' + error.message); }
+    refreshSpace();
+  };
+
+  // One dialog serves menus, prompts and confirmations; it resolves with the chosen value.
+  const ask = ({ title, body, input, buttons }) => new Promise(resolve => {
+    dialog.querySelector('h2').textContent = title;
+    const holder = dialog.querySelector('.f50-files-dialog-body'); holder.replaceChildren();
+    if (body) { const p = document.createElement('p'); p.textContent = body; holder.append(p); }
+    let field = null;
+    if (input) { field = document.createElement('input'); field.type = 'text'; field.value = input.value || ''; field.setAttribute('aria-label', input.label); field.autocomplete = 'off'; field.spellcheck = false; holder.append(field); }
+    const footer = dialog.querySelector('.f50-files-dialog-actions'); footer.replaceChildren();
+    // Resolve on the close event itself, so a follow-up dialog never receives this dialog's late close.
+    let chosen = null;
+    for (const spec of buttons) {
+      const button = document.createElement('button'); button.type = 'button'; button.textContent = spec.label;
+      if (spec.primary) { button.classList.add('f50-primary'); button.dataset.f50Primary = 'true'; }
+      if (spec.danger) { button.classList.add('f50-files-danger', 'f50-danger'); button.dataset.f50Danger = 'true'; }
+      if (spec.list) button.classList.add('f50-files-menu-item');
+      button.onclick = () => { chosen = spec.value === 'input' ? field.value.trim() : spec.value; dialog.close(); };
+      footer.append(button);
+    }
+    dialog.dataset.menu = String(buttons.some(spec => spec.list));
+    dialog.onclose = () => resolve(chosen);
+    field?.addEventListener('keydown', event => { if (event.key === 'Enter' && !event.isComposing) { event.preventDefault(); footer.querySelector('.f50-primary')?.click(); } });
+    dialog.showModal();
+    if (field) { field.focus(); const dot = field.value.lastIndexOf('.'); field.setSelectionRange(0, dot > 0 && !input.whole ? dot : field.value.length); }
+  });
+  const guard = async (work, failure) => {
+    if (busy) return; busy = true; showAlert('');
+    try { await work(); } catch (error) { showAlert(failure + error.message); } finally { busy = false; }
+  };
+  // Name checks use every real item, including hidden ones, so nothing hidden can be overwritten.
+  const exists = name => allNames.has(name);
+  const actions = async entry => {
+    const choice = await ask({ title: entry.name, buttons: [
+      ...(entry.dir ? [{ label: '打开', value: 'open', list: true }] : [{ label: '下载', value: 'download', list: true }]),
+      { label: '重命名', value: 'rename', list: true },
+      { label: '删除', value: 'delete', list: true, danger: true },
+      { label: '取消', value: null }
+    ] });
+    if (choice === 'open') open([...segments, entry.name]);
+    if (choice === 'download') guard(() => download(entry), '下载失败：');
+    if (choice === 'rename') rename(entry);
+    if (choice === 'delete') remove(entry);
+  };
+  const download = async entry => {
+    const ext = entry.name.includes('.') ? '.' + entry.name.split('.').pop().replace(/[^\w]/g, '').slice(0, 10) : '';
+    const token = 'f50dl-' + Array.from(crypto.getRandomValues(new Uint8Array(12)), n => n.toString(16).padStart(2, '0')).join('') + ext;
+    // The web service runs as its own app user, so it serves a private copy owned by that user; the copy runs in the background.
+    await shell(`S=${arg(pathOf(entry.name))}; T=${UPLOADS}/${token}; [ -f "$S" ] || { echo '${FAIL}文件不存在'; exit 0; }; mkdir -p ${UPLOADS}; O=$(stat -c %u:%g ${UPLOADS}); ( cp "$S" "$T.tmp" && chown "$O" "$T.tmp" && chmod 600 "$T.tmp" && mv "$T.tmp" "$T" || { rm -f "$T.tmp"; : > "$T.failed"; } ) >/dev/null 2>&1 & echo ${OK}`);
+    showAlert(''); setState(''); const note = $q('.f50-files-space p'), previous = note.textContent;
+    note.textContent = `正在准备下载「${entry.name}」…`;
+    try {
+      for (let waited = 0; ; waited += 1500) {
+        const out = await shell(`T=${UPLOADS}/${token}; [ -f "$T.failed" ] && { rm -f "$T.failed"; echo '${FAIL}无法准备下载文件'; exit 0; }; [ -f "$T" ] && echo ready; echo ${OK}`);
+        if (out.includes('ready')) break;
+        if (waited > 600000) throw Error('准备时间过长');
+        await new Promise(resolve => setTimeout(resolve, 1500));
+      }
+    } finally { note.textContent = previous; }
+    const link = document.createElement('a'); link.href = '/api/uploads/' + token; link.download = entry.name; document.body.append(link); link.click(); link.remove();
+  };
+  const rename = async entry => {
+    const name = await ask({ title: '重命名', input: { label: '新名称', value: entry.name, whole: entry.dir }, buttons: [{ label: '取消', value: null }, { label: '保存', value: 'input', primary: true }] });
+    if (name === null || name === entry.name) return;
+    if (!validName(name)) return showAlert('名称不能为空，也不能包含「/」。');
+    if (exists(name)) return showAlert(`当前文件夹已有「${name}」。`);
+    guard(async () => { await shell(`S=${arg(pathOf(entry.name))}; T=${arg(pathOf(name))}; [ -e "$T" ] && { echo '${FAIL}已存在同名项目'; exit 0; }; ${step('mv -- "$S" "$T"', '重命名失败')}; echo ${OK}`); await open(); }, '重命名失败：');
+  };
+  const remove = async entry => {
+    const confirmed = await ask({ title: entry.dir ? '删除文件夹' : '删除文件', body: entry.dir ? `删除「${entry.name}」及其中的全部内容？此操作无法撤销。` : `删除「${entry.name}」？此操作无法撤销。`, buttons: [{ label: '取消', value: null }, { label: '删除', value: 'yes', primary: true, danger: true }] });
+    if (confirmed !== 'yes') return;
+    guard(async () => { await shell(`P=${arg(pathOf(entry.name))}; ${step('rm -rf -- "$P"', '删除失败')}; echo ${OK}`, 90000); await open(); }, '删除失败：');
+  };
+  $q('.f50-files-newdir').onclick = async () => {
+    if (!signedIn()) return showModal?.('#tokenModal');
+    const name = await ask({ title: '新建文件夹', input: { label: '文件夹名称', value: '新建文件夹', whole: true }, buttons: [{ label: '取消', value: null }, { label: '创建', value: 'input', primary: true }] });
+    if (name === null) return;
+    if (!validName(name)) return showAlert('名称不能为空，也不能包含「/」。');
+    if (exists(name)) return showAlert(`当前文件夹已有「${name}」。`);
+    guard(async () => { await shell(`P=${arg(pathOf(name))}; ${step('mkdir -- "$P"', '创建失败')}; echo ${OK}`); await open(); }, '新建文件夹失败：');
+  };
+
+  // Uploads stream in 16 MiB parts through the native upload endpoint; each part is appended to a hidden temporary file.
+  const tasks = [];
+  const renderQueue = () => {
+    queue.hidden = !tasks.length; queue.replaceChildren();
+    if (!tasks.length) return;
+    const heading = document.createElement('div'); heading.className = 'f50-files-queue-heading';
+    const active = tasks.filter(task => task.state === 'uploading' || task.state === 'waiting').length;
+    heading.innerHTML = '<strong></strong>'; heading.firstChild.textContent = active ? `正在上传 ${active} 个文件` : '上传已完成';
+    if (!active) { const clear = document.createElement('button'); clear.type = 'button'; clear.className = 'f50-text-button'; clear.textContent = '清除'; clear.onclick = () => { tasks.length = 0; renderQueue(); }; heading.append(clear); }
+    queue.append(heading);
+    for (const task of tasks) {
+      const row = document.createElement('div'); row.className = 'f50-files-task'; row.dataset.state = task.state;
+      const percent = task.size ? Math.floor(task.sent / task.size * 100) : 100;
+      const status = { waiting: '等待中', uploading: `${percent}% · ${formatSize(task.sent)} / ${formatSize(task.size)}`, done: '已完成', failed: task.error || '上传失败', cancelled: '已取消' }[task.state];
+      row.innerHTML = '<div class="f50-files-task-copy"><strong></strong><small></small></div><div class="f50-files-task-track"><span></span></div>';
+      row.querySelector('strong').textContent = task.name; row.querySelector('small').textContent = status;
+      row.querySelector('.f50-files-task-track span').style.width = (task.state === 'done' ? 100 : percent) + '%';
+      if (task.state === 'uploading' || task.state === 'waiting') {
+        const cancel = document.createElement('button'); cancel.type = 'button'; cancel.className = 'f50-files-task-cancel'; cancel.innerHTML = glyph('close'); cancel.setAttribute('aria-label', '取消上传 ' + task.name);
+        cancel.onclick = () => { task.cancelled = true; task.controller?.abort(); if (task.state === 'waiting') task.state = 'cancelled'; renderQueue(); };
+        row.append(cancel);
+      }
+      queue.append(row);
+    }
+  };
+  const uniqueName = (name, taken) => {
+    const used = candidate => taken.has(candidate);
+    if (!used(name)) return name;
+    const dot = name.lastIndexOf('.'), stem = dot > 0 ? name.slice(0, dot) : name, ext = dot > 0 ? name.slice(dot) : '';
+    for (let i = 1; ; i++) { const next = `${stem} (${i})${ext}`; if (!used(next)) return next; }
+  };
+  let pumping = false;
+  const pump = async () => {
+    if (pumping) return; pumping = true;
+    try {
+      for (let task; (task = tasks.find(item => item.state === 'waiting'));) {
+        task.state = 'uploading'; renderQueue();
+        const dir = task.dir, temp = [...dir, '.' + task.target + '.f50upload'].join('/'), target = [...dir, task.target].join('/');
+        let appending = Promise.resolve();
+        try {
+          await shell(`T=${arg(temp)}; ${step(': > "$T"', '无法写入目标文件夹')}; echo ${OK}`);
+          // Upload the next part while the previous one is appended; appends stay in order.
+          for (let offset = 0; offset < task.file.size || offset === 0; offset += CHUNK) {
+            if (task.cancelled) throw Error('cancelled');
+            const form = new FormData(); form.append('file', task.file.slice(offset, offset + CHUNK), 'part.f50part');
+            task.controller = new AbortController();
+            const response = await fetch(`${KANO_baseURL}/upload_img`, { method: 'POST', headers: { ...(typeof common_headers === 'object' ? common_headers : {}) }, body: form, signal: task.controller.signal });
+            const data = await response.json().catch(() => ({}));
+            if (!response.ok || !/^\/uploads\/[a-f0-9-]+\.f50part$/.test(data.url || '')) throw Error(data.error || '设备未接收上传数据');
+            const part = UPLOADS + '/' + data.url.split('/').pop(), end = Math.min(task.file.size, offset + CHUNK);
+            task.sent = Math.max(task.sent, Math.min(end, task.file.size - 1)); renderQueue();
+            await appending;
+            appending = shell(`T=${arg(temp)}; ${step(`cat '${part}' >> "$T"`, '写入失败，可能空间不足')}; rm -f '${part}'; echo ${OK}`, 90000).then(() => { task.sent = end; renderQueue(); });
+            appending.catch(() => {});
+            if (!task.file.size) break;
+          }
+          await appending;
+          await shell(`S=${arg(temp)}; T=${arg(target)}; [ -e "$T" ] && { rm -f "$S"; echo '${FAIL}目标位置已有同名文件，未覆盖'; exit 0; }; ${step('mv -- "$S" "$T"', '无法完成保存')}; echo ${OK}`);
+          task.state = 'done';
+        } catch (error) {
+          task.state = task.cancelled ? 'cancelled' : 'failed'; task.error = error.name === 'AbortError' ? '已取消' : error.message;
+          await appending.catch(() => {});
+          await shell(`rm -f ${arg(temp)}; echo ${OK}`).catch(() => {});
+        }
+        renderQueue();
+        if (task.dir.join('/') === pathOf()) open();
+      }
+    } finally { pumping = false; }
+  };
+  const enqueue = files => {
+    if (!signedIn()) return showModal?.('#tokenModal');
+    const list = Array.from(files).filter(file => file.size || file.type || file.name);
+    if (!list.length) return;
+    const free = Number(root.dataset.free || 0), total = list.reduce((sum, file) => sum + file.size, 0);
+    if (free && total > free - 64 * 1024 * 1024) return showAlert(`空间不足：需要 ${formatSize(total)}，可用 ${formatSize(Math.max(0, free - 64 * 1024 * 1024))}。`);
+    const taken = new Set([...allNames, ...tasks.filter(task => task.dir.join('/') === pathOf()).map(task => task.target)]);
+    for (const file of list) {
+      const target = uniqueName(validName(file.name) ? file.name : 'upload', taken); taken.add(target);
+      tasks.push({ file, name: file.name, target, dir: [ROOT, ...segments], size: file.size, sent: 0, state: 'waiting' });
+    }
+    showAlert(''); renderQueue(); pump();
+  };
+  $q('.f50-files-upload').onclick = () => signedIn() ? picker.click() : showModal?.('#tokenModal');
+  picker.onchange = () => { enqueue(picker.files); picker.value = ''; };
+
+  // Dropping files anywhere on this page uploads them into the open folder.
+  let depth = 0;
+  const hasFiles = event => Array.from(event.dataTransfer?.types || []).includes('Files');
+  page.addEventListener('dragenter', event => { if (!hasFiles(event)) return; event.preventDefault(); depth++; drop.querySelector('strong').textContent = '上传到「' + (segments.at(-1) || '机内存储') + '」'; drop.hidden = false; });
+  page.addEventListener('dragover', event => { if (hasFiles(event)) event.preventDefault(); });
+  page.addEventListener('dragleave', () => { if (--depth <= 0) { depth = 0; drop.hidden = true; } });
+  page.addEventListener('drop', event => { if (!hasFiles(event)) return; event.preventDefault(); depth = 0; drop.hidden = true; enqueue(event.dataTransfer.files); });
+  window.addEventListener('beforeunload', event => { if (tasks.some(task => task.state === 'uploading' || task.state === 'waiting')) { event.preventDefault(); event.returnValue = ''; } });
+
+  renderCrumbs();
+  return { refresh: () => open() };
+};
+
+    filesView=installFilesPage($('#f50-page-files'),icon);
     const speedObservers=[];
     const speedLock={owner:null};
     // Transfer acknowledged bytes in each direction; never use LAN upload progress as WAN speed.
