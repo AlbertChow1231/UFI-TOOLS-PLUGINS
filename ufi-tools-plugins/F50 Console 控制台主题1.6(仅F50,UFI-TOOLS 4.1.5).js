@@ -1388,12 +1388,8 @@ html.f50-console #tokenModal .f50-login-footer>button.f50-login-submit[data-busy
 .f50-files-actions {display:flex;gap:8px;flex:none;}
 .f50-files-actions>button {display:inline-flex;align-items:center;gap:6px;min-height:36px;margin:0!important;padding:8px 14px!important;font-size:13px!important;}
 .f50-files-actions .f50-icon {width:16px;height:16px;}
-.f50-files-space {display:flex;align-items:center;gap:12px;}
-.f50-files-space-track {flex:none;width:120px;height:6px;border-radius:3px;background:var(--f-border);overflow:hidden;}
-.f50-files-space-track>span {display:block;height:100%;width:0;background:var(--f-blue);border-radius:3px;}
-.f50-files-space p {margin:0;font-size:12px;color:var(--f-muted);font-variant-numeric:tabular-nums;}
 .f50-files-alert {margin:0;padding:10px 12px;border-radius:8px;background:color-mix(in srgb,var(--f-danger,#c63737) 9%,transparent);color:var(--f-danger,#c63737);font-size:13px;line-height:20px;}
-.f50-files-alert[hidden],.f50-files-queue[hidden],.f50-files-drop[hidden],.f50-files-state[hidden] {display:none!important;}
+.f50-files-alert[hidden],.f50-files-queue[hidden],.f50-files-drop[hidden],.f50-files-state[hidden],.f50-files-head[hidden] {display:none!important;}
 .f50-files-panel {background:var(--f-panel);border:1px solid var(--f-border);border-radius:10px;overflow:hidden;}
 .f50-file-row {display:flex;align-items:center;border-bottom:1px solid var(--f-border);}
 .f50-file-row:last-child {border-bottom:0;}
@@ -1442,8 +1438,7 @@ html.f50-console #tokenModal .f50-login-footer>button.f50-login-submit[data-busy
 @media(max-width:600px){
   .f50-files-actions {width:100%;}
   .f50-files-actions>button {flex:1;justify-content:center;min-height:44px;}
-  .f50-files-space-track {width:72px;}
-  .f50-file-main {padding-left:12px!important;}
+    .f50-file-main {padding-left:12px!important;}
   .f50-files-dialog-actions>button {flex:1;min-height:44px;}
 }
 /* .f50-danger opts these buttons out of the console's blue primary rule. */
@@ -1455,6 +1450,59 @@ html.f50-console .f50-files-dialog .f50-files-dialog-actions>button.f50-primary.
 .f50-file-row[data-empty=true] .f50-file-icon {background:var(--f-bg);color:var(--f-muted);opacity:.6;}
 .f50-file-row[data-empty=true] .f50-file-copy strong {color:var(--f-muted);font-weight:400;}
 @media(max-width:600px){.f50-files-actions {flex-wrap:wrap;} .f50-files-sort {width:100%;} .f50-files-sort select {flex:1;min-height:44px;}}
+
+/* v1.6.4 — Finder list view: columns, sortable headers, status bar, thumbnails and Quick Look. */
+.f50-files-head {display:grid;grid-template-columns:minmax(0,1fr) 150px 84px 150px 48px;align-items:center;padding:0 0 0 64px;border-bottom:1px solid var(--f-border);background:var(--f-bg);}
+.f50-files-head>button {display:flex;align-items:center;gap:4px;min-height:32px;margin:0!important;padding:6px 8px!important;border:0!important;border-radius:0!important;background:transparent!important;color:var(--f-muted)!important;font-size:12px!important;font-weight:500;text-align:left;}
+.f50-files-head>button[data-sort=size] {justify-content:flex-end;}
+.f50-files-head>button[data-active=true] {color:var(--f-text)!important;}
+.f50-files-head>button[data-dir=asc]::after {content:"▲";font-size:8px;}
+.f50-files-head>button[data-dir=desc]::after {content:"▼";font-size:8px;}
+.f50-file-main {display:grid!important;grid-template-columns:36px minmax(0,1fr) 150px 84px 150px;column-gap:12px;}
+.f50-file-col {font-size:12px;color:var(--f-muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-variant-numeric:tabular-nums;padding:0 8px 0 0;}
+.f50-file-col[data-col=size] {text-align:right;}
+.f50-file-copy small {display:none;}
+.f50-file-icon[data-thumb=true] {background:var(--f-bg);overflow:hidden;}
+.f50-file-icon img {width:100%;height:100%;object-fit:cover;display:block;}
+.f50-files-status {margin:0;padding:10px 16px;border-top:1px solid var(--f-border);font-size:12px;color:var(--f-muted);text-align:center;font-variant-numeric:tabular-nums;}
+.f50-files-status:empty {display:none;}
+.f50-files-sort {display:none;}
+@media(max-width:760px){
+  .f50-files-head {display:none!important;}
+  .f50-file-main {grid-template-columns:36px minmax(0,1fr);}
+  .f50-file-col {display:none;}
+  .f50-file-copy small {display:block;}
+  .f50-files-sort {display:inline-flex;}
+}
+.f50-files-preview {width:min(1040px,calc(100vw - 32px));height:min(820px,calc(100dvh - 32px));max-width:none;max-height:none;padding:0;border:1px solid var(--f-border);border-radius:14px;background:var(--f-panel);color:var(--f-text);box-shadow:0 24px 64px rgb(0 0 0 / .32);overflow:hidden;}
+.f50-files-preview[open] {display:flex;flex-direction:column;}
+.f50-files-preview::backdrop {background:rgb(10 12 16 / .62);}
+.f50-files-preview header {display:flex;align-items:center;gap:12px;padding:10px 12px 10px 20px;border-bottom:1px solid var(--f-border);}
+.f50-files-preview-title {display:flex;flex-direction:column;flex:1;min-width:0;}
+.f50-files-preview-title strong {font-size:14px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.f50-files-preview-title small {font-size:12px;color:var(--f-muted);font-variant-numeric:tabular-nums;}
+.f50-files-preview-tools {display:flex;gap:4px;flex:none;}
+.f50-files-preview-tools>button {display:grid;place-items:center;width:40px;height:40px;min-height:40px;margin:0!important;padding:0!important;border:0!important;border-radius:8px!important;background:transparent!important;color:var(--f-text)!important;}
+.f50-files-preview-tools>button:hover {background:var(--f-selected)!important;}
+.f50-files-preview-tools>button:disabled {opacity:.3;}
+.f50-files-preview-tools .f50-icon {width:20px;height:20px;}
+.f50-files-preview-stage {position:relative;flex:1;min-height:0;display:grid;place-items:center;background:var(--f-bg);overflow:auto;}
+.f50-files-preview-stage>img,.f50-files-preview-stage>video {max-width:100%;max-height:100%;object-fit:contain;display:block;}
+.f50-files-preview-stage[data-kind=image]>img {cursor:zoom-out;}
+.f50-files-preview-stage>audio {width:min(480px,90%);}
+.f50-files-preview-stage>iframe {width:100%;height:100%;border:0;background:#fff;}
+.f50-files-preview-stage>pre {align-self:stretch;justify-self:stretch;margin:0;padding:16px 20px;overflow:auto;font:12px/1.6 ui-monospace,SFMono-Regular,Menlo,monospace;white-space:pre-wrap;word-break:break-word;color:var(--f-text);}
+.f50-files-preview-note {margin:0;padding:24px;font-size:13px;color:var(--f-muted);text-align:center;}
+@media(max-width:600px){.f50-files-preview {width:100vw;height:100dvh;border-radius:0;border:0;} .f50-files-preview-tools>button {width:44px;height:44px;}}
+
+/* The console's generic dialog rules set width and margins; the viewer keeps its own frame. */
+html.f50-console #f50-files-preview {position:fixed!important;inset:0!important;margin:auto!important;transform:none!important;width:min(1040px,calc(100vw - 32px))!important;height:min(820px,calc(100dvh - 32px))!important;max-width:none!important;max-height:none!important;padding:0!important;border-radius:14px!important;}
+html.f50-console #f50-files-preview p {margin:0;}
+html.f50-console #f50-files-preview pre {border:0!important;border-radius:0!important;background:transparent!important;padding:16px 20px!important;}
+@media(max-width:600px){html.f50-console #f50-files-preview {width:100vw!important;height:100dvh!important;border-radius:0!important;border:0!important;}}
+
+.f50-files-preview-open {position:absolute;right:16px;bottom:16px;z-index:1;padding:8px 14px;border-radius:8px;background:var(--f-panel);border:1px solid var(--f-border);color:var(--f-blue);font-size:13px;text-decoration:none;box-shadow:0 2px 8px rgb(0 0 0 / .12);}
+.f50-files-preview-stage>video {width:100%;height:100%;background:#000;}
 
 </style>
 <script>
@@ -2293,38 +2341,61 @@ const installFilesPage = (page, icon) => {
   };
   const step = (command, message) => `{ ${command} ; } >/dev/null 2>&1 || { echo '${FAIL}${message}'; exit 0; }`;
   const signedIn = () => typeof KANO_TOKEN !== 'undefined' && !!KANO_TOKEN;
-  let segments = [], entries = [], allNames = new Set(), busy = false, folderTotal = 0, sortKey = 'name';
-  try { sortKey = localStorage.getItem('f50-files-sort') || 'name'; } catch {}
+  let segments = [], entries = [], allNames = new Set(), busy = false, folderTotal = 0, freeBytes = 0, sortKey = 'name', sortDir = 1;
+  try { [sortKey = 'name', sortDir = 1] = JSON.parse(localStorage.getItem('f50-files-sort-v2') || '[]'); } catch {}
+  if (!['name', 'time', 'size', 'kind'].includes(sortKey)) sortKey = 'name';
+  // Android recreates its standard folders at boot; empty ones at the root stay out of view instead of being deleted.
+  const standardFolders = /^(Alarms|Audiobooks|DCIM|Documents|Download|Movies|Music|Notifications|Pictures|Podcasts|Recordings|Ringtones)$/;
   // System items at the storage root stay out of view: app data, firmware staging, logs and the boot script that starts Mihomo.
   const hiddenAtRoot = name => /^(Android|Upgrade|sd_logs|lost\+found)$/.test(name) || /^ufi_|^unlock_samba\.sh$|\.(sh|log|lock|flag)$/i.test(name);
   const pathOf = (...extra) => [ROOT, ...segments, ...extra].join('/');
   const rawOf = (...extra) => [RAW, ...segments, ...extra].join('/');
   const validName = name => !!name && name.length <= 200 && !/[\/\0]/.test(name) && name !== '.' && name !== '..';
 
+  // Sizes and dates follow macOS Finder: decimal units, three significant digits, 今天 / 昨天.
   const formatSize = bytes => {
-    if (bytes < 1024) return bytes + ' B';
+    if (bytes < 1000) return bytes + ' 字节';
     const units = ['KB', 'MB', 'GB', 'TB']; let value = bytes, unit = -1;
-    do { value /= 1024; unit++; } while (value >= 1024 && unit < units.length - 1);
-    return (value >= 100 ? value.toFixed(0) : value.toFixed(1)) + ' ' + units[unit];
+    do { value /= 1000; unit++; } while (value >= 999.5 && unit < units.length - 1);
+    return (value >= 100 ? value.toFixed(0) : value >= 10 ? value.toFixed(1) : value.toFixed(1)).replace(/\.0$/, '') + ' ' + units[unit];
   };
   const formatTime = seconds => {
     const date = new Date(seconds * 1000), now = new Date(), pad = n => String(n).padStart(2, '0');
-    const clock = `${pad(date.getHours())}:${pad(date.getMinutes())}`;
-    if (date.toDateString() === now.toDateString()) return '今天 ' + clock;
-    return `${date.getFullYear() === now.getFullYear() ? '' : date.getFullYear() + '-'}${pad(date.getMonth() + 1)}-${pad(date.getDate())} ${clock}`;
+    const clock = `${pad(date.getHours())}:${pad(date.getMinutes())}`, day = d => new Date(d.getFullYear(), d.getMonth(), d.getDate()).getTime();
+    const diff = Math.round((day(now) - day(date)) / 86400000);
+    if (diff === 0) return '今天 ' + clock;
+    if (diff === 1) return '昨天 ' + clock;
+    return `${date.getFullYear()}年${date.getMonth() + 1}月${date.getDate()}日 ${clock}`;
   };
+  const extOf = name => name.includes('.') ? name.split('.').pop().toLowerCase() : '';
   const kindOf = name => {
-    const ext = name.includes('.') ? name.split('.').pop().toLowerCase() : '';
-    if (/^(jpe?g|png|gif|webp|heic|bmp|svg)$/.test(ext)) return 'image';
-    if (/^(mp4|mov|mkv|avi|webm|m4v)$/.test(ext)) return 'video';
-    if (/^(mp3|flac|wav|m4a|aac|ogg)$/.test(ext)) return 'audio';
+    const ext = extOf(name);
+    if (/^(jpe?g|png|gif|webp|bmp|svg|avif)$/.test(ext)) return 'image';
+    if (/^(heic|heif)$/.test(ext)) return 'photo';
+    if (/^(mp4|mov|webm|m4v)$/.test(ext)) return 'video';
+    if (/^(mkv|avi|wmv|flv)$/.test(ext)) return 'movie';
+    if (/^(mp3|flac|wav|m4a|aac|ogg|opus)$/.test(ext)) return 'audio';
+    if (ext === 'pdf') return 'pdf';
+    if (/^(txt|md|log|json|csv|xml|yaml|yml|ini|conf|sh|js|css|html|py)$/.test(ext)) return 'text';
     if (/^(zip|rar|7z|gz|tar|xz|apk)$/.test(ext)) return 'archive';
     return 'file';
   };
+  const kindLabels = { jpg: 'JPEG 图像', jpeg: 'JPEG 图像', png: 'PNG 图像', gif: 'GIF 图像', webp: 'WebP 图像', heic: 'HEIC 图像', heif: 'HEIF 图像', bmp: 'BMP 图像', svg: 'SVG 图像', avif: 'AVIF 图像', mp4: 'MPEG-4 影片', mov: 'QuickTime 影片', m4v: 'MPEG-4 影片', webm: 'WebM 影片', mkv: 'Matroska 影片', avi: 'AVI 影片', mp3: 'MP3 音频', flac: 'FLAC 音频', wav: 'WAV 音频', m4a: 'MPEG-4 音频', aac: 'AAC 音频', ogg: 'Ogg 音频', opus: 'Opus 音频', pdf: 'PDF 文稿', txt: '纯文本文稿', md: 'Markdown 文稿', log: '日志文件', json: 'JSON 文件', csv: 'CSV 文稿', xml: 'XML 文稿', zip: 'ZIP 归档', rar: 'RAR 归档', '7z': '7-Zip 归档', gz: 'Gzip 归档', tar: 'TAR 归档', apk: 'Android 安装包' };
+  const kindLabel = entry => entry.dir ? '文件夹' : kindLabels[extOf(entry.name)] || (extOf(entry.name) ? extOf(entry.name).toUpperCase() + ' 文件' : '文稿');
+  // Quick Look: what the browser can show directly.
+  // HEIC and Matroska are attempted: Safari shows HEIC, Chrome often plays MKV; anything else falls back to download.
+  const previewKind = entry => entry.dir ? null : ({ image: 'image', photo: 'image', video: 'video', movie: extOf(entry.name) === 'mkv' ? 'video' : null, audio: 'audio', pdf: 'pdf', text: 'text' })[kindOf(entry.name)] || null;
   const glyphs = {
     folder: 'M3.5 7.5A2 2 0 0 1 5.5 5.5h4l2 2h7a2 2 0 0 1 2 2v7.5a2 2 0 0 1-2 2h-13a2 2 0 0 1-2-2Z',
     file: 'M7 3.5h6.5L18 8v11.5a1.5 1.5 0 0 1-1.5 1.5h-9A1.5 1.5 0 0 1 6 19.5v-14A1.5 1.5 0 0 1 7.5 3.5ZM13 3.5V8h4.5',
     image: 'M4.5 5.5h15v13h-15ZM4.5 15.5l4-4 3.5 3.5 2.5-2.5 5 4M15 9.5h.01',
+    photo: 'M4.5 5.5h15v13h-15ZM4.5 15.5l4-4 3.5 3.5 2.5-2.5 5 4M15 9.5h.01',
+    movie: 'M4 6.5h11v11H4ZM15 10.5l5-3v9l-5-3',
+    pdf: 'M7 3.5h6.5L18 8v11.5a1.5 1.5 0 0 1-1.5 1.5h-9A1.5 1.5 0 0 1 6 19.5v-14A1.5 1.5 0 0 1 7.5 3.5ZM9 13h6M9 16h4',
+    text: 'M7 3.5h6.5L18 8v11.5a1.5 1.5 0 0 1-1.5 1.5h-9A1.5 1.5 0 0 1 6 19.5v-14A1.5 1.5 0 0 1 7.5 3.5ZM9 11h6M9 14h6M9 17h4',
+    chevronLeft: 'M14.5 6 8.5 12l6 6',
+    chevronRight: 'M9.5 6l6 6-6 6',
+    download: 'M12 5v11m0 0-4-4m4 4 4-4M5 18.5h14',
     video: 'M4 6.5h11v11H4ZM15 10.5l5-3v9l-5-3',
     audio: 'M9 17.5V6l10-2v11.5M9 17.5a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0ZM19 15.5a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0Z',
     archive: 'M5 4.5h14v15H5ZM12 4.5v2m0 2v2m0 2v2m-1.5 0h3v3h-3Z',
@@ -2337,16 +2408,23 @@ const installFilesPage = (page, icon) => {
 
   // File names are data: the console's text cleanup must never rewrite them.
   const root = document.createElement('div'); root.className = 'f50-files'; root.dataset.f50Preserve = 'true';
-  root.innerHTML = `<div class="f50-files-toolbar"><nav class="f50-files-crumbs" aria-label="当前位置"></nav><div class="f50-files-actions"><label class="f50-files-sort"><span>排序</span><select aria-label="排序方式"><option value="name">名称</option><option value="size">大小</option><option value="time">修改时间</option></select></label><button type="button" class="f50-files-newdir">${glyph('newFolder')}<span>新建文件夹</span></button><button type="button" class="f50-files-upload f50-primary" data-f50-primary="true">${glyph('upload')}<span>上传</span></button><input type="file" multiple hidden></div></div>
-<div class="f50-files-space"><div class="f50-files-space-track"><span></span></div><p></p></div>
+  root.innerHTML = `<div class="f50-files-toolbar"><nav class="f50-files-crumbs" aria-label="当前位置"></nav><div class="f50-files-actions"><label class="f50-files-sort"><span>排序</span><select aria-label="排序方式"><option value="name">名称</option><option value="time">修改日期</option><option value="size">大小</option><option value="kind">种类</option></select></label><button type="button" class="f50-files-newdir">${glyph('newFolder')}<span>新建文件夹</span></button><button type="button" class="f50-files-upload f50-primary" data-f50-primary="true">${glyph('upload')}<span>上传</span></button><input type="file" multiple hidden></div></div>
 <p class="f50-files-alert" role="alert" hidden></p>
 <section class="f50-files-queue" aria-label="上传任务" hidden></section>
-<section class="f50-files-panel"><div class="f50-files-list" role="list" aria-label="文件列表"></div><p class="f50-files-state" role="status"></p></section>
+<section class="f50-files-panel"><div class="f50-files-head" role="presentation"><button type="button" data-sort="name">名称</button><button type="button" data-sort="time">修改日期</button><button type="button" data-sort="size">大小</button><button type="button" data-sort="kind">种类</button><span></span></div><div class="f50-files-list" role="list" aria-label="文件列表"></div><p class="f50-files-state" role="status"></p><p class="f50-files-status" role="status"></p></section>
 <div class="f50-files-drop" hidden><div>${glyph('upload')}<strong></strong><span>松开即可上传</span></div></div>
-<dialog class="f50-files-dialog"><form method="dialog"><h2></h2><div class="f50-files-dialog-body"></div><div class="f50-files-dialog-actions"></div></form></dialog>`;
+<dialog class="f50-files-dialog"><form method="dialog"><h2></h2><div class="f50-files-dialog-body"></div><div class="f50-files-dialog-actions"></div></form></dialog>
+<dialog id="f50-files-preview" class="f50-files-preview" aria-label="预览"><header><div class="f50-files-preview-title"><strong></strong><small></small></div><div class="f50-files-preview-tools"><button type="button" data-preview="prev" aria-label="上一项">${glyph('chevronLeft')}</button><button type="button" data-preview="next" aria-label="下一项">${glyph('chevronRight')}</button><button type="button" data-preview="download" aria-label="下载">${glyph('download')}</button><button type="button" data-preview="close" aria-label="关闭">${glyph('close')}</button></div></header><div class="f50-files-preview-stage"></div></dialog>`;
   page.append(root);
   const sortSelect = root.querySelector('.f50-files-sort select'); sortSelect.value = sortKey;
-  sortSelect.onchange = () => { sortKey = sortSelect.value; try { localStorage.setItem('f50-files-sort', sortKey); } catch {} renderList(); };
+  // Finder sorting: click a column to sort, click again to reverse. Names ascend; dates and sizes start newest / largest.
+  const setSort = (key, toggle) => {
+    sortDir = toggle && key === sortKey ? -sortDir : key === 'name' || key === 'kind' ? 1 : -1; sortKey = key; sortSelect.value = key;
+    try { localStorage.setItem('f50-files-sort-v2', JSON.stringify([sortKey, sortDir])); } catch {}
+    renderList();
+  };
+  sortSelect.onchange = () => setSort(sortSelect.value, false);
+  root.querySelectorAll('.f50-files-head [data-sort]').forEach(button => { button.onclick = () => setSort(button.dataset.sort, true); });
   const $q = selector => root.querySelector(selector);
   const crumbs = $q('.f50-files-crumbs'), list = $q('.f50-files-list'), state = $q('.f50-files-state'), alertBox = $q('.f50-files-alert');
   const queue = $q('.f50-files-queue'), picker = $q('input[type=file]'), drop = $q('.f50-files-drop'), dialog = $q('.f50-files-dialog');
@@ -2366,35 +2444,53 @@ const installFilesPage = (page, icon) => {
     });
   };
   const byName = (a, b) => a.name.localeCompare(b.name, 'zh-Hans-CN', { numeric: true });
-  const sorters = { name: (a, b) => (b.dir - a.dir) || byName(a, b), size: (a, b) => (b.size - a.size) || byName(a, b), time: (a, b) => (b.mtime - a.mtime) || byName(a, b) };
+  const sorters = { name: (a, b) => byName(a, b), time: (a, b) => (a.mtime - b.mtime) || byName(a, b), size: (a, b) => (a.size - b.size) || byName(a, b), kind: (a, b) => kindLabel(a).localeCompare(kindLabel(b), 'zh-Hans-CN') || byName(a, b) };
+  // Thumbnail copies are swept after 10 minutes on the device; reuse them for 8.
+  const thumbs = new Map(), freshThumb = path => { const item = thumbs.get(path); return item && Date.now() - item.at < 8 * 60000 ? item.url : null; };
   const renderList = () => {
     list.replaceChildren();
-    entries.sort(sorters[sortKey] || sorters.name);
+    // Folders stay on top when sorting by name, as Finder does by default.
+    entries.sort((a, b) => (sortKey === 'name' ? b.dir - a.dir : 0) || sortDir * (sorters[sortKey] || sorters.name)(a, b));
+    root.querySelectorAll('.f50-files-head [data-sort]').forEach(button => { const active = button.dataset.sort === sortKey; button.dataset.active = String(active); button.dataset.dir = active ? (sortDir > 0 ? 'asc' : 'desc') : ''; button.setAttribute('aria-sort', active ? (sortDir > 0 ? 'ascending' : 'descending') : 'none'); });
     for (const entry of entries) {
       const row = document.createElement('div'); row.className = 'f50-file-row'; row.setAttribute('role', 'listitem');
       const main = document.createElement('button'); main.type = 'button'; main.className = 'f50-file-main';
       const kind = entry.dir ? 'folder' : kindOf(entry.name);
-      main.innerHTML = `<span class="f50-file-icon" data-kind="${kind}">${glyph(kind)}</span><span class="f50-file-copy"><strong></strong><small></small></span>`;
+      const size = entry.dir ? (entry.count ? formatSize(entry.size) : '--') : formatSize(entry.size), time = formatTime(entry.mtime);
+      main.innerHTML = `<span class="f50-file-icon" data-kind="${kind}">${glyph(kind)}</span><span class="f50-file-copy"><strong></strong><small></small></span><span class="f50-file-col" data-col="time"></span><span class="f50-file-col" data-col="size"></span><span class="f50-file-col" data-col="kind"></span>`;
       main.querySelector('strong').textContent = entry.name;
-      main.querySelector('small').textContent = (entry.dir ? (entry.count ? `${entry.count} 项 · ${formatSize(entry.size)}` : '空文件夹') : formatSize(entry.size)) + ' · ' + formatTime(entry.mtime);
+      main.querySelector('small').textContent = entry.dir ? `${entry.count ? entry.count + ' 项' : '空文件夹'} · ${time}` : `${size} · ${time}`;
+      main.querySelector('[data-col=time]').textContent = time;
+      main.querySelector('[data-col=size]').textContent = size;
+      main.querySelector('[data-col=kind]').textContent = entry.dir ? (entry.count ? `文件夹 · ${entry.count} 项` : '文件夹 · 空') : kindLabel(entry);
       if (entry.dir && !entry.count) row.dataset.empty = 'true';
-      main.setAttribute('aria-label', (entry.dir ? '打开文件夹 ' : '文件操作 ') + entry.name);
-      main.onclick = () => entry.dir ? open([...segments, entry.name]) : actions(entry);
+      const preview = previewKind(entry);
+      main.setAttribute('aria-label', (entry.dir ? '打开文件夹 ' : preview ? '预览 ' : '文件操作 ') + entry.name);
+      main.onclick = () => entry.dir ? open([...segments, entry.name]) : preview ? quickLook(entry) : actions(entry);
+      const thumb = freshThumb(pathOf(entry.name));
+      if (thumb) { const img = document.createElement('img'); img.alt = ''; img.loading = 'lazy'; img.src = thumb; main.querySelector('.f50-file-icon').replaceChildren(img); main.querySelector('.f50-file-icon').dataset.thumb = 'true'; }
       const more = document.createElement('button'); more.type = 'button'; more.className = 'f50-file-more';
       more.innerHTML = glyph('more'); more.setAttribute('aria-label', '更多操作：' + entry.name); more.onclick = () => actions(entry);
       row.append(main, more); list.append(row);
     }
     if (!entries.length) setState('这个文件夹是空的，可以点「上传」或把文件拖到这里。');
+    $q('.f50-files-head').hidden = !entries.length;
+    renderStatus();
+  };
+  // Finder's status bar: item count, size of what is shown, and free space on the device.
+  const renderStatus = () => {
+    const status = $q('.f50-files-status');
+    status.textContent = `${entries.length} 个项目 · ${segments.length ? '此文件夹' : '你的文件'}共 ${formatSize(folderTotal)}${freeBytes ? ` · 可用 ${formatSize(freeBytes)}` : ''}`;
   };
   const refreshSpace = async () => {
     try {
       const out = await shell(`df -k ${ROOT} | tail -n 1; echo ${OK}`);
       const [, total, used, free] = out.trim().split(/\s+/).map(Number);
       if (!total) return;
-      // The partition also holds the system and apps; name the user's own files separately.
-      $q('.f50-files-space p').textContent = `${segments.length ? '此文件夹' : '你的文件'} ${formatSize(folderTotal)} · 设备已用 ${formatSize(used * 1024)}（含系统与应用），可用 ${formatSize(free * 1024)}`;
-      $q('.f50-files-space-track span').style.width = Math.min(100, used / total * 100).toFixed(1) + '%';
-      root.dataset.free = String(free * 1024);
+      freeBytes = free * 1024; root.dataset.free = String(freeBytes);
+      // The partition also holds the system and apps; that total stays in the tooltip.
+      $q('.f50-files-status').title = `设备已用 ${formatSize(used * 1024)}（含系统与应用），共 ${formatSize(total * 1024)}`;
+      renderStatus();
     } catch {}
   };
   const open = async (next = segments) => {
@@ -2410,9 +2506,9 @@ const installFilesPage = (page, icon) => {
         return { dir, count: Number(count) || 0, size: dir ? (Number(kb) || 0) * 1024 : Number(size) || 0, mtime: Number(mtime) || 0, name: name.join('\t').split('/').pop() };
       }).filter(entry => entry.name);
       allNames = new Set(listed.map(entry => entry.name));
-      entries = listed.filter(entry => !entry.name.endsWith('.f50upload') && !(segments.length === 0 && hiddenAtRoot(entry.name)));
+      entries = listed.filter(entry => !entry.name.endsWith('.f50upload') && !(segments.length === 0 && (hiddenAtRoot(entry.name) || (entry.dir && !entry.count && standardFolders.test(entry.name)))));
       folderTotal = entries.reduce((sum, entry) => sum + entry.size, 0);
-      setState(''); renderList();
+      setState(''); renderList(); loadThumbs();
     } catch (error) { entries = []; list.replaceChildren(); setState(''); showAlert('无法读取文件夹：' + error.message); }
     refreshSpace();
   };
@@ -2449,33 +2545,126 @@ const installFilesPage = (page, icon) => {
   const exists = name => allNames.has(name);
   const actions = async entry => {
     const choice = await ask({ title: entry.name, buttons: [
-      ...(entry.dir ? [{ label: '打开', value: 'open', list: true }] : [{ label: '下载', value: 'download', list: true }]),
+      ...(entry.dir ? [{ label: '打开', value: 'open', list: true }] : [...(previewKind(entry) ? [{ label: '预览', value: 'preview', list: true }] : []), { label: '下载', value: 'download', list: true }]),
       { label: '重命名', value: 'rename', list: true },
       { label: '删除', value: 'delete', list: true, danger: true },
       { label: '取消', value: null }
     ] });
     if (choice === 'open') open([...segments, entry.name]);
+    if (choice === 'preview') quickLook(entry);
     if (choice === 'download') guard(() => download(entry), '下载失败：');
     if (choice === 'rename') rename(entry);
     if (choice === 'delete') remove(entry);
   };
-  const download = async entry => {
-    const ext = entry.name.includes('.') ? '.' + entry.name.split('.').pop().replace(/[^\w]/g, '').slice(0, 10) : '';
-    const token = 'f50dl-' + Array.from(crypto.getRandomValues(new Uint8Array(12)), n => n.toString(16).padStart(2, '0')).join('') + ext;
-    // The web service runs as its own app user, so it serves a private copy owned by that user; the copy runs in the background.
-    await shell(`S=${arg(pathOf(entry.name))}; T=${UPLOADS}/${token}; [ -f "$S" ] || { echo '${FAIL}文件不存在'; exit 0; }; mkdir -p ${UPLOADS}; O=$(stat -c %u:%g ${UPLOADS}); ( cp "$S" "$T.tmp" && chown "$O" "$T.tmp" && chmod 600 "$T.tmp" && mv "$T.tmp" "$T" || { rm -f "$T.tmp"; : > "$T.failed"; } ) >/dev/null 2>&1 & echo ${OK}`);
-    showAlert(''); setState(''); const note = $q('.f50-files-space p'), previous = note.textContent;
-    note.textContent = `正在准备下载「${entry.name}」…`;
-    try {
-      for (let waited = 0; ; waited += 1500) {
-        const out = await shell(`T=${UPLOADS}/${token}; [ -f "$T.failed" ] && { rm -f "$T.failed"; echo '${FAIL}无法准备下载文件'; exit 0; }; [ -f "$T" ] && echo ready; echo ${OK}`);
-        if (out.includes('ready')) break;
-        if (waited > 600000) throw Error('准备时间过长');
-        await new Promise(resolve => setTimeout(resolve, 1500));
-      }
-    } finally { note.textContent = previous; }
-    const link = document.createElement('a'); link.href = '/api/uploads/' + token; link.download = entry.name; document.body.append(link); link.click(); link.remove();
+  const newToken = name => 'f50dl-' + Array.from(crypto.getRandomValues(new Uint8Array(12)), n => n.toString(16).padStart(2, '0')).join('') + (extOf(name) ? '.' + extOf(name).replace(/[^\w]/g, '').slice(0, 10) : '');
+  // The web service runs as its own app user, so it serves a private copy owned by that user; the copy runs in the background.
+  const prepared = new Map();
+  const prepare = async (path, onWait) => {
+    const cached = prepared.get(path);
+    if (cached && Date.now() - cached.at < 8 * 60000) return cached.url;
+    const token = newToken(path);
+    await shell(`S=${arg(path)}; T=${UPLOADS}/${token}; [ -f "$S" ] || { echo '${FAIL}文件不存在'; exit 0; }; mkdir -p ${UPLOADS}; O=$(stat -c %u:%g ${UPLOADS}); ( cp "$S" "$T.tmp" && chown "$O" "$T.tmp" && chmod 600 "$T.tmp" && mv "$T.tmp" "$T" || { rm -f "$T.tmp"; : > "$T.failed"; } ) >/dev/null 2>&1 & echo ${OK}`);
+    for (let waited = 0; ; waited += 800) {
+      const out = await shell(`T=${UPLOADS}/${token}; [ -f "$T.failed" ] && { rm -f "$T.failed"; echo '${FAIL}无法读取文件'; exit 0; }; [ -f "$T" ] && echo ready; echo ${OK}`);
+      if (out.includes('ready')) break;
+      if (waited > 600000) throw Error('准备时间过长');
+      onWait?.(waited);
+      await new Promise(resolve => setTimeout(resolve, 800));
+    }
+    const url = '/api/uploads/' + token; prepared.set(path, { url, at: Date.now() }); return url;
   };
+  const download = async entry => {
+    const status = $q('.f50-files-status'), previous = status.textContent;
+    status.textContent = `正在准备下载「${entry.name}」…`;
+    let url; try { url = await prepare(pathOf(entry.name)); } finally { status.textContent = previous; }
+    const link = document.createElement('a'); link.href = url; link.download = entry.name; document.body.append(link); link.click(); link.remove();
+  };
+  // Thumbnails: small images in the open folder are copied in one batch, newest folder visit only.
+  let thumbRun = 0;
+  const loadThumbs = async () => {
+    const run = ++thumbRun, folder = pathOf();
+    const wanted = entries.filter(entry => kindOf(entry.name) === 'image' && entry.size <= 8000000 && !freshThumb(pathOf(entry.name))).slice(0, 48);
+    if (!wanted.length) return;
+    const jobs = wanted.map(entry => ({ path: pathOf(entry.name), token: newToken(entry.name) }));
+    try {
+      await shell(`mkdir -p ${UPLOADS}; O=$(stat -c %u:%g ${UPLOADS}); ${jobs.map(job => `S=${arg(job.path)}; T=${UPLOADS}/${job.token}; cp "$S" "$T" 2>/dev/null && chown "$O" "$T" && chmod 600 "$T";`).join(' ')} echo ${OK}`, 90000);
+    } catch { return; }
+    for (const job of jobs) { thumbs.set(job.path, { url: '/api/uploads/' + job.token, at: Date.now() }); prepared.set(job.path, { url: '/api/uploads/' + job.token, at: Date.now() }); }
+    if (run === thumbRun && folder === pathOf()) renderList();
+  };
+
+  // Quick Look: a large centered viewer; arrow keys move between previewable items, Escape closes.
+  const viewer = $q('.f50-files-preview'), stage = viewer.querySelector('.f50-files-preview-stage');
+  let viewing = null, viewRun = 0, objectUrl = null;
+  const dropObjectUrl = () => { if (objectUrl) { URL.revokeObjectURL(objectUrl); objectUrl = null; } };
+  // The device serves whole files only (no byte ranges). Safari needs ranges to play media, so audio and video are read
+  // into memory first and played from a local object URL, which also makes seeking work everywhere.
+  const MEDIA_LIMIT = 500 * 1000 * 1000;
+  const readToBlob = async (url, onProgress, run) => {
+    const response = await fetch(url, { cache: 'no-store' });
+    if (!response.ok || !response.body) throw Error('读取失败');
+    const total = Number(response.headers.get('content-length')) || 0, reader = response.body.getReader(), parts = [];
+    for (let loaded = 0; ;) {
+      const { done, value } = await reader.read(); if (done) break;
+      if (run !== viewRun) { reader.cancel(); throw Error('cancelled'); }
+      parts.push(value); loaded += value.byteLength; onProgress(loaded, total);
+    }
+    return new Blob(parts, { type: response.headers.get('content-type') || '' });
+  };
+  const viewable = () => entries.filter(previewKind);
+  const quickLook = async entry => {
+    viewing = entry; const run = ++viewRun, kind = previewKind(entry);
+    viewer.querySelector('strong').textContent = entry.name;
+    viewer.querySelector('small').textContent = `${kindLabel(entry)} · ${formatSize(entry.size)} · ${formatTime(entry.mtime)}`;
+    const items = viewable(), index = items.indexOf(entry);
+    viewer.querySelector('[data-preview=prev]').disabled = index <= 0; viewer.querySelector('[data-preview=next]').disabled = index < 0 || index >= items.length - 1;
+    stage.replaceChildren(); dropObjectUrl(); stage.dataset.kind = kind; stage.dataset.state = 'loading';
+    const note = document.createElement('p'); note.className = 'f50-files-preview-note'; note.textContent = '正在准备预览…'; stage.append(note);
+    if (!viewer.open) viewer.showModal();
+    try {
+      const big = entry.size > 300 * 1000 * 1000;
+      const url = await prepare(pathOf(entry.name), waited => { if (run === viewRun && big) note.textContent = `正在准备预览… 大文件需要稍等（${Math.round(waited / 1000)} 秒）`; });
+      if (run !== viewRun) return;
+      let media, source = url;
+      if ((kind === 'video' || kind === 'audio') && entry.size <= MEDIA_LIMIT) {
+        const blob = await readToBlob(url, (loaded, total) => { note.textContent = `正在载入… ${total ? Math.floor(loaded / total * 100) + '%' : formatSize(loaded)}`; }, run);
+        if (run !== viewRun) return;
+        dropObjectUrl(); objectUrl = source = URL.createObjectURL(blob);
+      } else if (kind === 'video' || kind === 'audio') {
+        throw Error(`文件超过 ${formatSize(MEDIA_LIMIT)}，请下载后观看`);
+      }
+      if (kind === 'image') { media = document.createElement('img'); media.alt = entry.name; }
+      else if (kind === 'video') { media = document.createElement('video'); media.controls = true; media.playsInline = true; media.preload = 'metadata'; }
+      else if (kind === 'audio') { media = document.createElement('audio'); media.controls = true; }
+      else if (kind === 'pdf') {
+        media = document.createElement('iframe'); media.title = entry.name;
+        // Some mobile browsers cannot render PDFs inline; a plain link opens the browser's own viewer.
+        const open = document.createElement('a'); open.className = 'f50-files-preview-open'; open.href = url; open.target = '_blank'; open.rel = 'noopener'; open.textContent = '在新标签页打开';
+        stage.append(open);
+      }
+      else {
+        media = document.createElement('pre');
+        const text = await (await fetch(url, { cache: 'no-store' })).text();
+        if (run !== viewRun) return;
+        media.textContent = text.length > 200000 ? text.slice(0, 200000) + '\n…（仅显示前 200 KB）' : text;
+      }
+      if (kind !== 'text') media.src = source;
+      const unsupported = () => { if (run === viewRun) { note.textContent = '这个浏览器无法预览此格式，可以点右上角下载后查看。'; stage.dataset.state = 'error'; media.remove(); if (!note.isConnected) stage.append(note); } };
+      media.addEventListener('error', unsupported);
+      if (kind === 'video' || kind === 'audio') media.addEventListener('loadedmetadata', () => { if (kind === 'video' && !media.videoWidth) unsupported(); });
+      stage.dataset.state = 'ready'; note.remove(); stage.append(media);
+    } catch (error) { if (run === viewRun && error.message !== 'cancelled') { note.textContent = '无法预览：' + error.message; stage.dataset.state = 'error'; if (!note.isConnected) stage.append(note); } }
+  };
+  const step2 = delta => { const items = viewable(), index = items.indexOf(viewing); if (index >= 0 && items[index + delta]) quickLook(items[index + delta]); };
+  viewer.addEventListener('click', event => {
+    const action = event.target.closest('[data-preview]')?.dataset.preview;
+    if (action === 'close' || event.target === viewer) viewer.close();
+    if (action === 'prev') step2(-1);
+    if (action === 'next') step2(1);
+    if (action === 'download' && viewing) guard(() => download(viewing), '下载失败：');
+  });
+  viewer.addEventListener('keydown', event => { if (event.key === 'ArrowLeft') { event.preventDefault(); step2(-1); } if (event.key === 'ArrowRight') { event.preventDefault(); step2(1); } });
+  viewer.addEventListener('close', () => { viewRun++; stage.replaceChildren(); viewing = null; dropObjectUrl(); });
   const rename = async entry => {
     const name = await ask({ title: '重命名', input: { label: '新名称', value: entry.name, whole: entry.dir }, buttons: [{ label: '取消', value: null }, { label: '保存', value: 'input', primary: true }] });
     if (name === null || name === entry.name) return;
